@@ -44,9 +44,7 @@
 
 (defn strong-wind-in-forecast?
   [windspeeds]
-  (reduce
-   (fn [acc x] (and acc x))
-   (map strong-breeze-or-more? windspeeds)))
+  (some strong-breeze-or-more? windspeeds))
 
 (defn gale?
   []
