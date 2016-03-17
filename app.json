@@ -1,6 +1,6 @@
 {
-  "name": "Getting Started with Clojure",
-  "description": "A barebones Clojure app, which can easily be deployed to Heroku.",
+  "name": "Vindvarsler",
+  "description": "Sjekker yr.no om det er varslet kuling i Trondheim",
   "image": "heroku/clojure",
-  "addons": [ "heroku-postgresql" ]
+  "addons": []
 }
