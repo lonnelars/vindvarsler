@@ -44,7 +44,7 @@
 
 (defn strong-wind-in-forecast?
   [windspeeds]
-  (some strong-breeze-or-more? windspeeds))
+  (strong-breeze-or-more? (apply max windspeeds)))
 
 (defn gale?
   []

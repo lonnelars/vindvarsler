@@ -2,29 +2,23 @@
   (:require [compojure.core :refer [defroutes GET PUT POST DELETE ANY]]
             [compojure.handler :refer [site]]
             [compojure.route :as route]
+            [ring.middleware.json :as middleware]
+            [ring.util.response :refer [resource-response response]]
+            [ring.middleware.defaults :refer [wrap-defaults api-defaults]]
             [clojure.java.io :as io]
             [ring.adapter.jetty :as jetty]
             [environ.core :refer [env]]
             [vindvarsler.core :as vv]))
 
-(defn make-warning []
-  (let [gale? (vv/gale?)]
-    (str
-     "<h1>Blir det kuling? "
-     (if gale? "Ja" "Nei")
-     "</h1>")))
+(defroutes app-routes
+  (GET "/" [] (response {:kuling (vv/gale?)}))
+  (route/not-found "Not found"))
 
-(defn splash []
-  {:status 200
-   :headers {"Content-Type" "text/plain"}
-   :body "Hello from Heroku"})
-
-(defroutes app
-  (GET "/" []
-       (splash))
-  (GET "/vindvarsler" [] (make-warning))
-  (ANY "*" []
-       (route/not-found (slurp (io/resource "404.html")))))
+(def app
+  (-> app-routes
+      (middleware/wrap-json-response)
+      (middleware/wrap-json-body)
+      (wrap-defaults api-defaults)))
 
 (defn -main [& [port]]
   (let [port (Integer. (or port (env :port) 5000))]
